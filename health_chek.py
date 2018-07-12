@@ -1,5 +1,6 @@
 import urllib2
 import os
+response=''
 try:
     request = urllib2.Request('localhost:9200')
     response = urllib2.urlopen(request)
