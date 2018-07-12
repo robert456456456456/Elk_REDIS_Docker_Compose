@@ -21,11 +21,11 @@
 ## Now
 #### Then navigate on http://localhost:9200
 ### How would you monitor the health of the services?
-####Go to crontab
+#### Go to crontab
 ##### crontab -e
-####Add this two jobs one for service up in Reboot second chek if he alive or not if not he push it up
-######@reboot python /home/robert/Elk_REDIS_Docker_Compose/health_chek.py
-######* * * * * python /home/robert/Elk_REDIS_Docker_Compose/health_chek.py
+#### Add this two jobs one for service up in Reboot second chek if he alive or not if not he push it up
+###### @reboot python /home/robert/Elk_REDIS_Docker_Compose/health_chek.py
+###### * * * * * python /home/robert/Elk_REDIS_Docker_Compose/health_chek.py
 
 
 
