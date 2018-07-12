@@ -1,41 +1,24 @@
-elasticsearch:
-  image: elasticsearch:2
-  command: elasticsearch -Des.network.host=0.0.0.0
-  volumes:
-    - ./elasticsearch/data:/usr/share/elasticsearch/data
-    - ./elasticsearch/config/elasticsearch.yml:/etc/elasticsearch/config/elasticsearch.yml
+ elk:
+   image: elasticsearch:2
+   command: elasticsearch -Des.network.host=0.0.0.0
+   ports:
+        - "9200:9200"
+        - "9300:9300"
 
-  ports:
-    - "9200:9200"
-    - "9300:9300"
-  restart: always
+   volumes:
+        - ./Elasticsearch/data:/usr/share/elasticsearch/data
+        - ./Elasticsearch/config/elasticsearch.yml:/etc/elasticsearch/config/elasticsearch.yml
 
-redis:
-  image: redis:3
-  volumes:
-    - ./redis/data:/var/lib/redis
-  ports:
-    - "6379:6379"
-  restart: always
+   tty : true
 
-logstash:
-  image: logstash:2
-  command: logstash -f /etc/logstash/conf.d/logstash.conf
-  volumes:
-    - ./logstash/config:/etc/logstash/conf.d
-  ports:
-    - "5000:5000"
-  links:
-    - redis
-    - elasticsearch
-  restart: always
+ Redis:
+   image: redis:3
 
-kibana:
-  image: kibana:4.5
-  volumes:
-    - ./kibana/config/:/opt/kibana/config/
-  ports:
-    - "5601:5601"
-  links:
-    - elasticsearch
-  restart: always
+   ports:
+     - "6379:6379"
+
+   volumes:
+      - /Redis/redis.conf:/var/lib/redis
+
+   restart: always
+
