@@ -1,0 +1,24 @@
+ elk:
+   image: elasticsearch:2
+   command: elasticsearch -Des.network.host=0.0.0.0
+   ports:
+        - "9200:9200"
+        - "9300:9300"
+
+   volumes:
+        - ./Elasticsearch/data:/usr/share/elasticsearch/data
+        - ./Elasticsearch/config/elasticsearch.yml:/etc/elasticsearch/config/elasticsearch.yml
+
+   tty : true
+
+ Redis:
+   image: redis:3
+
+   ports:
+     - "6379:6379"
+
+   volumes:
+      - /Redis/redis.conf:/var/lib/redis
+
+   restart: always
+

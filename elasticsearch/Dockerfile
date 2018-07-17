@@ -1,6 +1,6 @@
-FROM elasticsearch:2
+FROM docker.elastic.co/elasticsearch/elasticsearch-oss:6.3.0
 
-MAINTAINER Ingresse
+
 
 RUN plugin install elasticsearch/license/latest && \
     plugin install elasticsearch/shield/latest
