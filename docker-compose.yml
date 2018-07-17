@@ -1,43 +1,40 @@
-  elk:
-     image: elasticsearch:2
-     command: elasticsearch -Des.network.host=0.0.0.0
-     ports:
-          - "9200:9200"
-          - "9300:9300"
+elasticsearch:
+  build:   elasticsearch:2
+  command: elasticsearch -Des.network.host=0.0.0.0
+  volumes:
+    - ./elasticsearch/data:/usr/share/elasticsearch/data
+    - ./elasticsearch/config/:/etc/elasticsearch/config/
+  ports:
+    - "9200:9200"
+    - "9300:9300"
+  restart: always
 
-     volumes:
-          - ./elasticsearch/data:/usr/share/elasticsearch/data
+redis:
+  image: redis:3
+  volumes:
+    - ./redis/data:/var/lib/redis
+  ports:
+    - "6379:6379"
+  restart: always
 
-     tty : true
+logstash:
+  image: logstash:2
+  command: logstash -f /etc/logstash/conf.d/logstash.conf
+  volumes:
+    - ./logstash/config:/etc/logstash/conf.d
+  ports:
+    - "5000:5000"
+  links:
+    - redis
+    - elasticsearch
+  restart: always
 
-  redis:
-    image: redis:3
-    volumes:
-      - ./redis/data:/var/lib/redis
-    ports:
-      - "6379:6379"
-    restart: always
-
-  logstash:
-    image: docker.elastic.co/logstash/logstash-oss:6.3.0
-    command: logstash -f /etc/logstash/conf.d/logstash.conf
-    volumes:
-      - ./logstash/config:/etc/logstash/conf.d
-    ports:
-      - "5000:5000"
-    environment:
-        LS_JAVA_OPTS: "-Xmx256m -Xms256m"
-    links:
-      - redis
-      - elasticsearch
-    restart: always
-
-  kibana:
-    image: docker.elastic.co/kibana/kibana-oss:6.3.0
-    volumes:
-      - ./kibana/config/:/opt/kibana/config/
-    ports:
-      - "5601:5601"
-    links:
-      - elasticsearch
-    restart: always
+kibana:
+  image: kibana:4.5
+  volumes:
+    - ./kibana/config/:/opt/kibana/config/
+  ports:
+    - "5601:5601"
+  links:
+    - elasticsearch
+  restart: always
