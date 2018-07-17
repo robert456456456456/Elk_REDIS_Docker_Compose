@@ -21,10 +21,19 @@ services:
       ports:
         - "6379:6379"
       restart: always
+
     logstash:
         container_name: logstash
-        build: ../../modules/logstash
         image: logstash:5.5.1
+        command: logstash -f /etc/logstash/conf.d/logstash.conf
+        volumes:
+          - ./logstash/config:/etc/logstash/conf.d
+        ports:
+          - "5000:5000"
+        links:
+          - redis
+          - elasticsearch
+        restart: always
 
     kibana:
         container_name: kibana
@@ -39,4 +48,4 @@ services:
         expose:
             - 5601
         volumes:
-            - "./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml"
+            - ./kibana/config/:/opt/kibana/config/
